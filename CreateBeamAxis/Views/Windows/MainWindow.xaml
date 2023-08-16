@@ -101,7 +101,39 @@
         </GroupBox>
         <GroupBox Header="Параметры"
                   Style="{StaticResource BorderGroupStyle}">
-
+            <StackPanel>
+                <DataGrid x:Name="datagrid"
+                          CanUserAddRows="False"
+                          AutoGenerateColumns="False"
+                          GridLinesVisibility="Vertical"
+                          VerticalGridLinesBrush="DarkGray"
+                          AlternatingRowBackground="LightGray"
+                          RowHeight="24"
+                          Height="100">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Расстояние от оси, м"
+                                            Width="130" />
+                        <DataGridTemplateColumn Header="Стиль линии"
+                                                Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <UniformGrid Columns="2"
+                             Margin="0,2,0,0">
+                    <Button Style="{StaticResource SelectButton}"
+                            Content="Добавить"
+                            Command="{Binding AddBeamSetupCommand}" />
+                    <Button Style="{StaticResource SelectButton}"
+                            Content="Удалить"
+                            Command="{Binding DeleteBeamSetupCommand}"
+                            CommandParameter="{Binding SelectedBeam}" />
+                </UniformGrid>
+            </StackPanel>
         </GroupBox>
         <GroupBox Header="Создание"
                   Style="{StaticResource BorderGroupStyle}">
@@ -109,7 +141,7 @@
                          Margin="0,12,0,5">
                 <Button Content="Создать"
                         Style="{StaticResource SelectButton}"
-                        Command="{Binding CreateLinesCommand}"/>
+                        Command="{Binding CreateLinesCommand}" />
                 <Button Content="Отмена"
                         Style="{StaticResource SelectButton}"
                         Command="{Binding CloseWindowCommand}" />

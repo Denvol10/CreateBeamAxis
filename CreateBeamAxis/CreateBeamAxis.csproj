@@ -58,6 +58,7 @@
     <Compile Include="Infrastructure\Base\Command.cs" />
     <Compile Include="Infrastructure\LambdaCommand.cs" />
     <Compile Include="Infrastructure\RevitCommand.cs" />
+    <Compile Include="Models\BeamAxis.cs" />
     <Compile Include="Models\Filters\ModelLineElementFilter.cs" />
     <Compile Include="Models\Filters\RoadAxisElementFilter.cs" />
     <Compile Include="Models\PolyCurve.cs" />

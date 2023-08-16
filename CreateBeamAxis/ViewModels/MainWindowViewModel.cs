@@ -55,6 +55,16 @@ namespace CreateBeamAxis.ViewModels
         }
         #endregion
 
+        #region Название стилей линий
+        private ObservableCollection<string> _graphicStyleNames;
+
+        public ObservableCollection<string> GraphicStyleNames
+        {
+            get => _graphicStyleNames;
+            set => Set(ref _graphicStyleNames, value);
+        }
+        #endregion
+
         #region Команды
 
         #region Получение оси трассы
@@ -124,6 +134,8 @@ namespace CreateBeamAxis.ViewModels
         public MainWindowViewModel(RevitModelForfard revitModel)
         {
             RevitModel = revitModel;
+
+            GraphicStyleNames = RevitModel.GetStyleLineNames();
 
             #region Инициализация значения оси из Settings
             if (!(Properties.Settings.Default["RoadAxisElemIds"] is null))
