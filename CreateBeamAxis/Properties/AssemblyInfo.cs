@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MarkingSections")]
+[assembly: AssemblyTitle("CreateBeamAxis")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MarkingSections")]
+[assembly: AssemblyProduct("CreateBeamAxis")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8518341b-04fb-41e4-b472-110e18a5c745")]
+[assembly: Guid("03d10257-69c3-46c7-9df6-c8d31e030bc5")]
 
 // Version information for an assembly consists of the following four values:
 //

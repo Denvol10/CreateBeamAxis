@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarkingSections.Models.Filters
+namespace CreateBeamAxis.Models.Filters
 {
-    internal class ModelLineElementFilter : ISelectionFilter
+    public class RoadAxisElementFilter : ISelectionFilter
     {
         public bool AllowElement(Element elem)
         {
-            if (elem is ModelLine)
+            if (elem is DirectShape)
                 return true;
 
             return false;

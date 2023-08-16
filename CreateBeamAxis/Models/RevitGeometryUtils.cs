@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MarkingSections.Models.Filters;
+using CreateBeamAxis.Models.Filters;
 
-namespace MarkingSections.Models
+namespace CreateBeamAxis.Models
 {
     public class RevitGeometryUtils
     {

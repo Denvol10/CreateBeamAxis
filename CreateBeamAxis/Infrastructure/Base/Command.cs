@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace MarkingSections.Infrastructure.Base
+namespace CreateBeamAxis.Infrastructure.Base
 {
     internal abstract class Command : ICommand
     {

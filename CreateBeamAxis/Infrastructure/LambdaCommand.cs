@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MarkingSections.Infrastructure.Base;
+using CreateBeamAxis.Infrastructure.Base;
 
-namespace MarkingSections.Infrastructure
+namespace CreateBeamAxis.Infrastructure
 {
     internal class LambdaCommand : Command
     {

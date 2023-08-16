@@ -3,9 +3,9 @@ using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using MarkingSections.ViewModels;
+using CreateBeamAxis.ViewModels;
 
-namespace MarkingSections.Infrastructure
+namespace CreateBeamAxis.Infrastructure
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]

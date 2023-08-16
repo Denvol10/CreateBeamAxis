@@ -11,9 +11,9 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Architecture;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using MarkingSections.Infrastructure;
+using CreateBeamAxis.Infrastructure;
 
-namespace MarkingSections.ViewModels
+namespace CreateBeamAxis.ViewModels
 {
     internal class MainWindowViewModel : Base.ViewModel
     {

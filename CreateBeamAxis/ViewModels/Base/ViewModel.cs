@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace MarkingSections.ViewModels.Base
+namespace CreateBeamAxis.ViewModels.Base
 {
     internal abstract class ViewModel : INotifyPropertyChanged
     {
