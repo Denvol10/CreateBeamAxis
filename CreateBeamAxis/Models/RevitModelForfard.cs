@@ -71,29 +71,30 @@ namespace CreateBeamAxis
         private SketchPlane _sketchPlane;
         #endregion
 
-        #region Начальная линия
-        public Curve StartLine { get; set; }
+        #region Линии границ блоков
+        public List<Line> SectionLines { get; set; }
 
-        private string _startLineElemIds;
-        public string StartLineElemIds
+        private string _sectionLinesElemIds;
+        public string SectionLinesElemIds
         {
-            get => _startLineElemIds;
-            set => _startLineElemIds = value;
+            get => _sectionLinesElemIds;
+            set => _sectionLinesElemIds = value;
         }
 
-        public void GetStartLine()
+        public void GetSectionLines()
         {
-            StartLine = RevitGeometryUtils.GetStartLine(Uiapp, out _startLineElemIds, out _sketchPlane);
+            SectionLines = RevitGeometryUtils.GetCurvesByLines(Uiapp, out _sectionLinesElemIds, out _sketchPlane);
         }
 
-        public void GetStartLineBySettings(string elementId)
+        public void GetSectionLinesBySettings(string elemIdsInSettings)
         {
-            StartLine = RevitGeometryUtils.GetStartLineById(Doc, elementId, out _sketchPlane);
+            var elemIds = RevitGeometryUtils.GetIdsByString(elemIdsInSettings);
+            SectionLines = RevitGeometryUtils.GetProfileLinesById(Doc, elemIds, out _sketchPlane);
         }
         #endregion
 
-        #region Проверка на то существует начальная линия
-        public bool IsStartLineExistInModel(string elemIdsInSettings)
+        #region Проверка на то существуют линии для построения профилей
+        public bool IsProfileLinesExistInModel(string elemIdsInSettings)
         {
             var elemIds = RevitGeometryUtils.GetIdsByString(elemIdsInSettings);
 
@@ -101,73 +102,8 @@ namespace CreateBeamAxis
         }
         #endregion
 
-        #region Создание линий
-        public void CreateLines(double distBetweenLines, bool isChangeDirection, int countLines, double lineLength)
-        {
-            double startParameter;
-            bool isStartLineIntersectAxis = RoadAxis.Intersect(StartLine, out _, out startParameter);
-            if(!isStartLineIntersectAxis)
-            {
-                TaskDialog.Show("Предупреждение", "Линия не пересекается с осью");
-                return;
-            }
+        #region Создание осей блоков ПС
 
-            var newLineParameters = new List<double>();
-
-            double dist = UnitUtils.ConvertToInternalUnits(distBetweenLines, UnitTypeId.Meters);
-            for(int i = 1; i <= countLines; i++)
-            {
-                if(isChangeDirection)
-                {
-                    newLineParameters.Add(startParameter + dist * i);
-                }
-                else
-                {
-                    newLineParameters.Add(startParameter - dist * i);
-                }
-            }
-
-            if(!(newLineParameters.Min() >= 0 && newLineParameters.Max() <= RoadAxis.GetLength()))
-            {
-                TaskDialog.Show("Предупреждение", "Линии выходят за границы оси");
-                return;
-            }
-
-            var planes = new List<Plane>();
-
-            foreach(var param in newLineParameters)
-            {
-                planes.Add(RoadAxis.GetPlaneOnPolycurve(param));
-            }
-
-            using(Transaction trans = new Transaction(Doc, "Created Model Lines"))
-            {
-                trans.Start();
-                foreach(var plane in planes)
-                {
-                    double halfLine = UnitUtils.ConvertToInternalUnits(lineLength / 2, UnitTypeId.Meters);
-                    XYZ vector = plane.XVec;
-                    if(vector.Z != 0)
-                    {
-                        vector = plane.YVec;
-                    }
-                    XYZ point1 = plane.Origin + vector.Normalize() * halfLine;
-                    XYZ point2 = plane.Origin - vector.Normalize() * halfLine;
-
-                    Line line = Line.CreateBound(point1, point2);
-                    if(Doc.IsFamilyDocument)
-                    {
-                        ModelCurve modelCurve = Doc.FamilyCreate.NewModelCurve(line, _sketchPlane);
-                    }
-                    else
-                    {
-                        ModelCurve modelCurve = Doc.Create.NewModelCurve(line, _sketchPlane);
-
-                    }
-                }
-                trans.Commit();
-            }
-        }
         #endregion
 
     }

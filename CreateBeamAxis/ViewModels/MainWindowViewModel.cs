@@ -26,7 +26,7 @@ namespace CreateBeamAxis.ViewModels
         }
 
         #region Заголовок
-        private string _title = "Разметка секций";
+        private string _title = "Оси блоков пролетного строения";
 
         public string Title
         {
@@ -45,53 +45,13 @@ namespace CreateBeamAxis.ViewModels
         }
         #endregion
 
-        #region Начальная линия
-        private string _startLineElemIds;
+        #region Линии границ блоков
+        private string _sectionLinesElemIds;
 
-        public string StartLineElemIds
+        public string SectionLinesElemIds
         {
-            get => _startLineElemIds;
-            set => Set(ref _startLineElemIds, value);
-        }
-        #endregion
-
-        #region Расстояние между линиями
-        private double _distanceBetweenLines = (double)Properties.Settings.Default["DistanceBetweenLines"];
-
-        public double DistanceBetweenLines
-        {
-            get => _distanceBetweenLines;
-            set => Set(ref _distanceBetweenLines, value);
-        }
-        #endregion
-
-        #region Длина линии
-        private double _lineLength = (double)Properties.Settings.Default["LineLength"];
-
-        public double LineLength
-        {
-            get => _lineLength;
-            set => Set(ref _lineLength, value);
-        }
-        #endregion
-
-        #region Направление построения линии
-        private bool _isChangeDirection = (bool)Properties.Settings.Default["IsChangeDirection"];
-
-        public bool IsChangeDirection
-        {
-            get => _isChangeDirection;
-            set => Set(ref _isChangeDirection, value);
-        }
-        #endregion
-
-        #region Количество линий
-        private int _countLines = (int)Properties.Settings.Default["CountLines"];
-
-        public int CountLines
-        {
-            get => _countLines;
-            set => Set(ref _countLines, value);
+            get => _sectionLinesElemIds;
+            set => Set(ref _sectionLinesElemIds, value);
         }
         #endregion
 
@@ -114,36 +74,25 @@ namespace CreateBeamAxis.ViewModels
         }
         #endregion
 
-        #region Получение начальной линии
-        public ICommand GetStartLineCommand { get; }
+        #region Получение линий границ блоков
+        public ICommand GetSectionLinesCommand { get; }
 
-        private void OnGetStartLineCommandExecuted(object parameter)
+        private void OnGetSectionLinesCommandExecuted(object parameter)
         {
             RevitCommand.mainView.Hide();
-            RevitModel.GetStartLine();
-            StartLineElemIds = RevitModel.StartLineElemIds;
+            RevitModel.GetSectionLines();
+            SectionLinesElemIds = RevitModel.SectionLinesElemIds;
             RevitCommand.mainView.ShowDialog();
         }
 
-        private bool CanGetStartLineCommandExecute(object parameter)
+        private bool CanGetSectionLinesCommandExecute(object parameter)
         {
             return true;
         }
         #endregion
 
-        #region Создание линий
-        public ICommand CreateLinesCommand { get; }
+        #region Создание осей блоков ПС
 
-        private void OnCreateLinesCommandExecuted(object parameter)
-        {
-            RevitModel.CreateLines(DistanceBetweenLines, IsChangeDirection, CountLines, LineLength);
-            SaveSettings();
-            //RevitCommand.mainView.Close();
-        }
-        private bool CanCreateLinesCommandExecute(object parameter)
-        {
-            return true;
-        }
         #endregion
 
         #region Закрыть окно
@@ -166,11 +115,7 @@ namespace CreateBeamAxis.ViewModels
         private void SaveSettings()
         {
             Properties.Settings.Default["RoadAxisElemIds"] = RoadAxisElemIds;
-            Properties.Settings.Default["StartLineElemIds"] = StartLineElemIds;
-            Properties.Settings.Default["DistanceBetweenLines"] = DistanceBetweenLines;
-            Properties.Settings.Default["LineLength"] = LineLength;
-            Properties.Settings.Default["IsChangeDirection"] = IsChangeDirection;
-            Properties.Settings.Default["CountLines"] = CountLines;
+            Properties.Settings.Default["SectionLinesElemIds"] = SectionLinesElemIds;
             Properties.Settings.Default.Save();
         }
 
@@ -192,22 +137,21 @@ namespace CreateBeamAxis.ViewModels
             }
             #endregion
 
-            #region Инициализация значения стартовой линии
-            if (!(Properties.Settings.Default["StartLineElemIds"] is null))
+            #region Инициализация значения линиям границ блоков
+            if (!(Properties.Settings.Default["SectionLinesElemIds"] is null))
             {
-                string startLineElemIdInSettings = Properties.Settings.Default["StartLineElemIds"].ToString();
-                if(RevitModel.IsStartLineExistInModel(startLineElemIdInSettings) && !string.IsNullOrEmpty(startLineElemIdInSettings))
+                string sectionLinesElemIdInSettings = Properties.Settings.Default["SectionLinesElemIds"].ToString();
+                if(RevitModel.IsProfileLinesExistInModel(sectionLinesElemIdInSettings) && !string.IsNullOrEmpty(sectionLinesElemIdInSettings))
                 {
-                    StartLineElemIds = startLineElemIdInSettings;
-                    RevitModel.GetStartLineBySettings(startLineElemIdInSettings);
+                    SectionLinesElemIds = sectionLinesElemIdInSettings;
+                    RevitModel.GetSectionLinesBySettings(sectionLinesElemIdInSettings);
                 }
             }
             #endregion
 
             #region Команды
             GetRoadAxisCommand = new LambdaCommand(OnGetRoadAxisCommandExecuted, CanGetRoadAxisCommandExecute);
-            GetStartLineCommand = new LambdaCommand(OnGetStartLineCommandExecuted, CanGetStartLineCommandExecute);
-            CreateLinesCommand = new LambdaCommand(OnCreateLinesCommandExecuted, CanCreateLinesCommandExecute);
+            GetSectionLinesCommand = new LambdaCommand(OnGetSectionLinesCommandExecuted, CanGetSectionLinesCommandExecute);
             CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
             #endregion
         }

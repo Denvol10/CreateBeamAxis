@@ -1,24 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MarkingSections.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CreateBeamAxis.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="RoadAxisElemIds" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="StartLineElemIds" Type="System.String" Scope="User">
+    <Setting Name="SectionLinesElemIds" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="DistanceBetweenLines" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">5</Value>
-    </Setting>
-    <Setting Name="LineLength" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">20</Value>
-    </Setting>
-    <Setting Name="IsChangeDirection" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="CountLines" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1</Value>
     </Setting>
   </Settings>
 </SettingsFile>

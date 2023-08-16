@@ -90,74 +90,18 @@
                   Style="{StaticResource BorderGroupStyle}">
             <UniformGrid Columns="2">
                 <UniformGrid Rows="2">
-                    <TextBlock Text="Начальная линия"
+                    <TextBlock Text="Оси блоков ПС"
                                Style="{StaticResource TextAboveButton}" />
                     <Button Style="{StaticResource SelectButton}"
-                            Command="{Binding GetStartLineCommand}" />
+                            Command="{Binding GetSectionLinesCommand}" />
                 </UniformGrid>
                 <TextBox Style="{StaticResource SelectedItemsBox}"
-                         Text="{Binding StartLineElemIds, Mode=OneWay}" />
+                         Text="{Binding SectionLinesElemIds, Mode=OneWay}" />
             </UniformGrid>
         </GroupBox>
         <GroupBox Header="Параметры"
                   Style="{StaticResource BorderGroupStyle}">
-            <UniformGrid Rows="4">
-                <UniformGrid Columns="2">
-                    <TextBlock Text="Расстояние между линиями, м"
-                               Style="{StaticResource TextAboveButton}"
-                               HorizontalAlignment="Left" />
-                    <TextBox Text="{Binding DistanceBetweenLines, UpdateSourceTrigger=PropertyChanged}"
-                             Width="60"
-                             Height="20"
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Center"
-                             TextAlignment="Center"
-                             Margin="6,0,0,0" />
-                </UniformGrid>
-                <UniformGrid Columns="2"
-                             Margin="0,2,0,0">
-                    <TextBlock Text="Длина линии, м"
-                               Style="{StaticResource TextAboveButton}"
-                               HorizontalAlignment="Left" />
-                    <TextBox Text="{Binding LineLength, UpdateSourceTrigger=PropertyChanged}"
-                             Width="60"
-                             Height="20"
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Center"
-                             TextAlignment="Center"
-                             Margin="6,0,0,0" />
-                </UniformGrid>
-                <CheckBox Content="Поменять направление"
-                          Style="{StaticResource CheckBoxStyle}"
-                          IsChecked="{Binding IsChangeDirection}" />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="110" />
-                        <ColumnDefinition Width="115" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                               Text="Количество линий"
-                               Style="{StaticResource TextAboveButton}"
-                               HorizontalAlignment="Left" />
-                    <TextBox Text="{Binding CountLines, UpdateSourceTrigger=PropertyChanged}"
-                             Grid.Column="1"
-                             Width="60"
-                             Height="20"
-                             HorizontalAlignment="Right"
-                             VerticalAlignment="Center"
-                             TextAlignment="Center" />
-                    <Slider Grid.Column="2"
-                            Value="{Binding CountLines}"
-                            Minimum="1"
-                            Maximum="20"
-                            SmallChange="1"
-                            Width="80"
-                            Height="20"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center" />
-                </Grid>
-            </UniformGrid>
+
         </GroupBox>
         <GroupBox Header="Создание"
                   Style="{StaticResource BorderGroupStyle}">

@@ -38,60 +38,12 @@ namespace CreateBeamAxis.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string StartLineElemIds {
+        public string SectionLinesElemIds {
             get {
-                return ((string)(this["StartLineElemIds"]));
+                return ((string)(this["SectionLinesElemIds"]));
             }
             set {
-                this["StartLineElemIds"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public double DistanceBetweenLines {
-            get {
-                return ((double)(this["DistanceBetweenLines"]));
-            }
-            set {
-                this["DistanceBetweenLines"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public double LineLength {
-            get {
-                return ((double)(this["LineLength"]));
-            }
-            set {
-                this["LineLength"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IsChangeDirection {
-            get {
-                return ((bool)(this["IsChangeDirection"]));
-            }
-            set {
-                this["IsChangeDirection"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int CountLines {
-            get {
-                return ((int)(this["CountLines"]));
-            }
-            set {
-                this["CountLines"] = value;
+                this["SectionLinesElemIds"] = value;
             }
         }
     }

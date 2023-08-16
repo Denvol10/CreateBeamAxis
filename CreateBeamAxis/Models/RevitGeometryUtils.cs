@@ -24,6 +24,40 @@ namespace CreateBeamAxis.Models
             return curvesRoadAxis;
         }
 
+        // Получение линий границ блоков ПС
+        public static List<Line> GetCurvesByLines(UIApplication uiapp, out string elementIds, out SketchPlane sketchPlane)
+        {
+            Selection sel = uiapp.ActiveUIDocument.Selection;
+            var elements = sel.PickElementsByRectangle(new ModelLineElementFilter(), "Select Lines");
+            var firstModelLine = elements.FirstOrDefault() as ModelLine;
+            sketchPlane = firstModelLine.SketchPlane;
+            Options options = new Options();
+            elementIds = ElementIdToString(elements);
+            var lines = elements.Select(e => e.get_Geometry(options).First()).OfType<Line>().ToList();
+
+            return lines;
+        }
+
+        // Получение линий границ блоков ПС по их id
+        public static List<Line> GetProfileLinesById(Document doc, IEnumerable<int> ids, out SketchPlane sketchPlane)
+        {
+            var elementsInSettings = new List<Element>();
+            foreach (var id in ids)
+            {
+                ElementId elemId = new ElementId(id);
+                Element elem = doc.GetElement(elemId);
+                elementsInSettings.Add(elem);
+            }
+
+            var firstElement = elementsInSettings.FirstOrDefault() as ModelLine;
+            sketchPlane = firstElement.SketchPlane;
+
+            Options options = new Options();
+            var lines = elementsInSettings.Select(e => e.get_Geometry(options).First()).OfType<Line>().ToList();
+
+            return lines;
+        }
+
         // Получение начальной линии
         public static Curve GetStartLine(UIApplication uiapp, out string elementIds, out SketchPlane sketchPlane)
         {
