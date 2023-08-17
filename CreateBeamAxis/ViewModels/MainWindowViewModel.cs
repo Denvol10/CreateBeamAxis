@@ -138,7 +138,7 @@ namespace CreateBeamAxis.ViewModels
         {
             var lastBeamAxisSetup = BeamAxisSetups.LastOrDefault();
 
-            if(!(lastBeamAxisSetup is null))
+            if (!(lastBeamAxisSetup is null))
             {
                 BeamAxisSetups.Remove(lastBeamAxisSetup);
             }
@@ -146,7 +146,7 @@ namespace CreateBeamAxis.ViewModels
 
         private bool CanDeleteBeamAxisCommandExecuted(object parameter)
         {
-            if(BeamAxisSetups is null || BeamAxisSetups.Count == 0)
+            if (BeamAxisSetups is null || BeamAxisSetups.Count == 0)
             {
                 return false;
             }
@@ -180,6 +180,11 @@ namespace CreateBeamAxis.ViewModels
         {
             Properties.Settings.Default["RoadAxisElemIds"] = RoadAxisElemIds;
             Properties.Settings.Default["SectionLinesElemIds"] = SectionLinesElemIds;
+            Properties.Settings.Default.BeamAxisSetup = new System.Collections.Specialized.StringCollection();
+            foreach (var axis in BeamAxisSetups)
+            {
+                Properties.Settings.Default.BeamAxisSetup.Add(axis.ToString());
+            }
             Properties.Settings.Default.Save();
         }
 
@@ -189,16 +194,25 @@ namespace CreateBeamAxis.ViewModels
         {
             RevitModel = revitModel;
 
-            BeamAxisSetups = new ObservableCollection<BeamAxis>
+            BeamAxisSetups = new ObservableCollection<BeamAxis>();
+
+            if (!(Properties.Settings.Default.BeamAxisSetup is null))
             {
-                new BeamAxis() { Distance = 5.5 }
-            };
+                foreach (var axisString in Properties.Settings.Default.BeamAxisSetup)
+                {
+                    double distance;
+                    if (double.TryParse(axisString, out distance))
+                    {
+                        BeamAxisSetups.Add(new BeamAxis { Distance = distance });
+                    }
+                }
+            }
 
             #region Инициализация значения оси из Settings
             if (!(Properties.Settings.Default["RoadAxisElemIds"] is null))
             {
                 string axisElemIdInSettings = Properties.Settings.Default["RoadAxisElemIds"].ToString();
-                if(RevitModel.IsLinesExistInModel(axisElemIdInSettings) && !string.IsNullOrEmpty(axisElemIdInSettings))
+                if (RevitModel.IsLinesExistInModel(axisElemIdInSettings) && !string.IsNullOrEmpty(axisElemIdInSettings))
                 {
                     RoadAxisElemIds = axisElemIdInSettings;
                     RevitModel.GetAxisBySettings(axisElemIdInSettings);
@@ -210,7 +224,7 @@ namespace CreateBeamAxis.ViewModels
             if (!(Properties.Settings.Default["SectionLinesElemIds"] is null))
             {
                 string sectionLinesElemIdInSettings = Properties.Settings.Default["SectionLinesElemIds"].ToString();
-                if(RevitModel.IsProfileLinesExistInModel(sectionLinesElemIdInSettings) && !string.IsNullOrEmpty(sectionLinesElemIdInSettings))
+                if (RevitModel.IsProfileLinesExistInModel(sectionLinesElemIdInSettings) && !string.IsNullOrEmpty(sectionLinesElemIdInSettings))
                 {
                     SectionLinesElemIds = sectionLinesElemIdInSettings;
                     RevitModel.GetSectionLinesBySettings(sectionLinesElemIdInSettings);

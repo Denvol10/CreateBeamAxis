@@ -46,5 +46,16 @@ namespace CreateBeamAxis.Properties {
                 this["SectionLinesElemIds"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection BeamAxisSetup {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["BeamAxisSetup"]));
+            }
+            set {
+                this["BeamAxisSetup"] = value;
+            }
+        }
     }
 }

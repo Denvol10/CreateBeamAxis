@@ -9,5 +9,10 @@ namespace CreateBeamAxis.Models
     public class BeamAxis
     {
         public double Distance { get; set; }
+
+        public override string ToString()
+        {
+            return Distance.ToString();
+        }
     }
 }
