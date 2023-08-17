@@ -102,19 +102,6 @@ namespace CreateBeamAxis
         }
         #endregion
 
-        // Получение списка названий стилей линий
-        public ObservableCollection<string> GetStyleLineNames()
-        {
-            var elems = new FilteredElementCollector(Doc).OfClass(typeof(GraphicsStyle)).OfType<GraphicsStyle>();
-            var names = new ObservableCollection<string>();
-            foreach(var elem in elems)
-            {
-                names.Add(elem.Name);
-            }
-
-            return names;
-        }
-
         #region Создание осей блоков ПС
 
         #endregion

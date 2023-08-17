@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:CreateBeamAxis"
         mc:Ignorable="d"
         Title="{Binding Title}"
-        Height="357"
+        Height="423"
         Width="350"
         Background="#f0f0f0"
         WindowStartupLocation="CenterScreen"
@@ -103,35 +103,28 @@
                   Style="{StaticResource BorderGroupStyle}">
             <StackPanel>
                 <DataGrid x:Name="datagrid"
+                          ItemsSource="{Binding BeamAxisSetups}"
                           CanUserAddRows="False"
                           AutoGenerateColumns="False"
                           GridLinesVisibility="Vertical"
                           VerticalGridLinesBrush="DarkGray"
                           AlternatingRowBackground="LightGray"
-                          RowHeight="24"
-                          Height="100">
+                          RowHeight="20"
+                          Height="128">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Расстояние от оси, м"
-                                            Width="130" />
-                        <DataGridTemplateColumn Header="Стиль линии"
-                                                Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ComboBox />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                            Binding="{Binding Distance, UpdateSourceTrigger=PropertyChanged}"
+                                            Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <UniformGrid Columns="2"
                              Margin="0,2,0,0">
                     <Button Style="{StaticResource SelectButton}"
                             Content="Добавить"
-                            Command="{Binding AddBeamSetupCommand}" />
+                            Command="{Binding AddBeamAxisCommand}" />
                     <Button Style="{StaticResource SelectButton}"
                             Content="Удалить"
-                            Command="{Binding DeleteBeamSetupCommand}"
-                            CommandParameter="{Binding SelectedBeam}" />
+                            Command="{Binding DeleteBeamAxisCommand}" />
                 </UniformGrid>
             </StackPanel>
         </GroupBox>

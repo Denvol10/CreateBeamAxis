@@ -138,15 +138,6 @@ namespace CreateBeamAxis.Models
             return lines;
         }
 
-        // Получение списка названий стилей линий
-        public static List<string> GetStyleLineNames(Document doc)
-        {
-            var elems = new FilteredElementCollector(doc).OfClass(typeof(GraphicsStyle)).OfType<GraphicsStyle>();
-            var names = elems.Select(e => e.Name).ToList();
-
-            return names;
-        }
-
         // Метод получения строки с ElementId
         private static string ElementIdToString(IEnumerable<Element> elements)
         {

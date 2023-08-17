@@ -12,6 +12,7 @@ using Autodesk.Revit.DB.Architecture;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using CreateBeamAxis.Infrastructure;
+using CreateBeamAxis.Models;
 
 namespace CreateBeamAxis.ViewModels
 {
@@ -65,6 +66,16 @@ namespace CreateBeamAxis.ViewModels
         }
         #endregion
 
+        #region Список настроек осей балок
+        private ObservableCollection<BeamAxis> _beamAxisSetups;
+
+        public ObservableCollection<BeamAxis> BeamAxisSetups
+        {
+            get => _beamAxisSetups;
+            set => Set(ref _beamAxisSetups, value);
+        }
+        #endregion
+
         #region Команды
 
         #region Получение оси трассы
@@ -97,6 +108,49 @@ namespace CreateBeamAxis.ViewModels
 
         private bool CanGetSectionLinesCommandExecute(object parameter)
         {
+            return true;
+        }
+        #endregion
+
+        #region Добавление настройки оси
+        public ICommand AddBeamAxisCommand { get; }
+
+        private void OnAddBeamAxisCommandExecuted(object parameter)
+        {
+            var beamAxis = new BeamAxis
+            {
+                Distance = 2.5
+            };
+
+            BeamAxisSetups.Add(beamAxis);
+        }
+
+        private bool CanAddBeamAxisCommandExecuted(object parameter)
+        {
+            return true;
+        }
+        #endregion
+
+        #region Удаление настройки оси из таблицы
+        public ICommand DeleteBeamAxisCommand { get; }
+
+        private void OnDeleteBeamAxisCommandExecuted(object parameter)
+        {
+            var lastBeamAxisSetup = BeamAxisSetups.LastOrDefault();
+
+            if(!(lastBeamAxisSetup is null))
+            {
+                BeamAxisSetups.Remove(lastBeamAxisSetup);
+            }
+        }
+
+        private bool CanDeleteBeamAxisCommandExecuted(object parameter)
+        {
+            if(BeamAxisSetups is null || BeamAxisSetups.Count == 0)
+            {
+                return false;
+            }
+
             return true;
         }
         #endregion
@@ -135,7 +189,10 @@ namespace CreateBeamAxis.ViewModels
         {
             RevitModel = revitModel;
 
-            GraphicStyleNames = RevitModel.GetStyleLineNames();
+            BeamAxisSetups = new ObservableCollection<BeamAxis>
+            {
+                new BeamAxis() { Distance = 5.5 }
+            };
 
             #region Инициализация значения оси из Settings
             if (!(Properties.Settings.Default["RoadAxisElemIds"] is null))
@@ -164,6 +221,8 @@ namespace CreateBeamAxis.ViewModels
             #region Команды
             GetRoadAxisCommand = new LambdaCommand(OnGetRoadAxisCommandExecuted, CanGetRoadAxisCommandExecute);
             GetSectionLinesCommand = new LambdaCommand(OnGetSectionLinesCommandExecuted, CanGetSectionLinesCommandExecute);
+            AddBeamAxisCommand = new LambdaCommand(OnAddBeamAxisCommandExecuted, CanAddBeamAxisCommandExecuted);
+            DeleteBeamAxisCommand = new LambdaCommand(OnDeleteBeamAxisCommandExecuted, CanDeleteBeamAxisCommandExecuted);
             CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
             #endregion
         }

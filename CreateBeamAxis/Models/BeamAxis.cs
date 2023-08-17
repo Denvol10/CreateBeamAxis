@@ -9,7 +9,5 @@ namespace CreateBeamAxis.Models
     public class BeamAxis
     {
         public double Distance { get; set; }
-
-        public string Name { get; set; }
     }
 }
