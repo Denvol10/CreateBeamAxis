@@ -134,7 +134,7 @@
                          Margin="0,12,0,5">
                 <Button Content="Создать"
                         Style="{StaticResource SelectButton}"
-                        Command="{Binding CreateLinesCommand}" />
+                        Command="{Binding CreateBeamAxisCommand}" />
                 <Button Content="Отмена"
                         Style="{StaticResource SelectButton}"
                         Command="{Binding CloseWindowCommand}" />

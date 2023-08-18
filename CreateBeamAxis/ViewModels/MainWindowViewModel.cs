@@ -156,7 +156,19 @@ namespace CreateBeamAxis.ViewModels
         #endregion
 
         #region Создание осей блоков ПС
+        public ICommand CreateBeamAxisCommand { get; }
 
+        private void OnCreateBeamAxisCommandExecuted(object parameter)
+        {
+            RevitModel.CreateBeamAxis(BeamAxisSetups);
+            SaveSettings();
+            RevitCommand.mainView.Close();
+        }
+
+        private bool CanCreateBeamAxisCommandExecute(object parameter)
+        {
+            return true;
+        }
         #endregion
 
         #region Закрыть окно
@@ -237,6 +249,7 @@ namespace CreateBeamAxis.ViewModels
             GetSectionLinesCommand = new LambdaCommand(OnGetSectionLinesCommandExecuted, CanGetSectionLinesCommandExecute);
             AddBeamAxisCommand = new LambdaCommand(OnAddBeamAxisCommandExecuted, CanAddBeamAxisCommandExecuted);
             DeleteBeamAxisCommand = new LambdaCommand(OnDeleteBeamAxisCommandExecuted, CanDeleteBeamAxisCommandExecuted);
+            CreateBeamAxisCommand = new LambdaCommand(OnCreateBeamAxisCommandExecuted, CanCreateBeamAxisCommandExecute);
             CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
             #endregion
         }
