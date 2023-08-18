@@ -118,70 +118,83 @@ namespace CreateBeamAxis
 
             parameters = parameters.OrderBy(p => p.Parameter).ToList();
 
-            var paramsForBeamAxisCreating = new List<(XYZ StartPoint, XYZ AxisDirection, XYZ RoadDirection)>();
+            var paramsForBeamAxisCreating = new List<(Line AxisLine1, Line AxisLine2, Line RoadLine, XYZ ReferenceVector)>();
 
-            for (int i = 0; i < parameters.Count - 1; i++)
+            for(int i = 0; i < parameters.Count - 1; i++)
             {
-                XYZ point = RoadAxis.GetPointOnPolycurve(parameters.ElementAt(i).Parameter, out _);
+                XYZ lineOrigin1 = RoadAxis.GetPointOnPolycurve(parameters.ElementAt(i).Parameter, out _);
+                XYZ lineDirection1 = parameters.ElementAt(i).SectionLine.Direction;
+                Line axisLine1 = Line.CreateUnbound(lineOrigin1, lineDirection1);
 
-                var sectionAxisDirection = parameters.ElementAt(i).SectionLine.Direction.Normalize();
+                XYZ lineOrigin2 = RoadAxis.GetPointOnPolycurve(parameters.ElementAt(i + 1).Parameter, out _);
+                XYZ lineDirection2 = parameters.ElementAt(i + 1).SectionLine.Direction;
+                Line axisLine2 = Line.CreateUnbound(lineOrigin2, lineDirection2);
 
-                XYZ roadAxisPoint2 = RoadAxis.GetPointOnPolycurve(parameters.ElementAt(i + 1).Parameter, out _);
+                XYZ roadLineDirection = lineOrigin1 - lineOrigin2;
+                Line roadLine = Line.CreateBound(lineOrigin1, lineOrigin2);
 
-                Line roadAxisLine = Line.CreateBound(point, roadAxisPoint2);
+                XYZ referenceVector = roadLineDirection.CrossProduct(XYZ.BasisZ).Normalize();
 
-                var roadAxisDirection = roadAxisLine.Direction;
-
-                XYZ normalVector = sectionAxisDirection.CrossProduct(roadAxisDirection);
-                if (normalVector.Z < 0)
-                {
-                    sectionAxisDirection = sectionAxisDirection.Negate();
-                }
-
-                paramsForBeamAxisCreating.Add((point, sectionAxisDirection, roadAxisDirection));
+                paramsForBeamAxisCreating.Add((axisLine1, axisLine2, roadLine, referenceVector));
             }
-
-            XYZ lastPoint = RoadAxis.GetPointOnPolycurve(parameters.Last().Parameter, out _);
-            XYZ lastPointDirection = parameters.Last().SectionLine.Direction.Normalize();
-            XYZ lastRoadAxisLineDirection = paramsForBeamAxisCreating.Last().RoadDirection;
-            XYZ lastNormal = lastPointDirection.CrossProduct(lastRoadAxisLineDirection);
-            if (lastNormal.Z < 0)
-            {
-                lastPointDirection = lastPointDirection.Negate();
-            }
-
-            paramsForBeamAxisCreating.Add((lastPoint, lastPointDirection, lastRoadAxisLineDirection));
 
             var beamAxis = new List<Line>();
 
-            for (int i = 0; i < parameters.Count - 1; i++)
+            foreach(var param in paramsForBeamAxisCreating)
             {
-                foreach (var blockParam in beamParameters)
+                foreach(var axisParam in beamParameters)
                 {
-                    double distance = UnitUtils.ConvertToInternalUnits(blockParam.Distance, UnitTypeId.Meters);
+                    double distance = UnitUtils.ConvertToInternalUnits(axisParam.Distance, UnitTypeId.Meters);
 
-                    XYZ startPoint1 = paramsForBeamAxisCreating.ElementAt(i).StartPoint;
-                    XYZ startPoint2 = paramsForBeamAxisCreating.ElementAt(i + 1).StartPoint;
+                    XYZ offsetPoint1 = param.RoadLine.GetEndPoint(0) + param.ReferenceVector * distance;
+                    XYZ offsetPoint2 = param.RoadLine.GetEndPoint(1) + param.ReferenceVector * distance;
 
-                    XYZ vector1 = paramsForBeamAxisCreating.ElementAt(i).AxisDirection * distance;
-                    XYZ vector2 = paramsForBeamAxisCreating.ElementAt(i + 1).AxisDirection * distance;
+                    Line offsetLine = Line.CreateBound(offsetPoint1, offsetPoint2);
 
-                    XYZ point1 = startPoint1 + vector1;
-                    XYZ point2 = startPoint2 + vector2;
+                    Line unboundOffsetLine = Line.CreateUnbound(offsetLine.GetEndPoint(0), offsetLine.Direction);
 
-                    Line axis = Line.CreateBound(point1, point2);
+                    XYZ point1 = null;
+                    var result1 = new IntersectionResultArray();
+                    var compResult1 = unboundOffsetLine.Intersect(param.AxisLine1, out result1);
+                    if (compResult1 == SetComparisonResult.Overlap)
+                    {
+                        foreach(var elem in result1)
+                        {
+                            if(elem is IntersectionResult interResult)
+                            {
+                                point1 = interResult.XYZPoint;
+                            }
+                        }
+                    }
 
-                    beamAxis.Add(axis);
+                    XYZ point2 = null;
+                    var result2 = new IntersectionResultArray();
+                    var compResult2 = unboundOffsetLine.Intersect(param.AxisLine2, out result2);
+                    if(compResult2 == SetComparisonResult.Overlap)
+                    {
+                        foreach(var elem in result2)
+                        {
+                            if(elem is IntersectionResult interResult)
+                            {
+                                point2 = interResult.XYZPoint;
+                            }    
+                        }
+                    }
+
+                    if (!(point1 is null || point2 is null))
+                    {
+                        beamAxis.Add(Line.CreateBound(point1, point2));
+                    }
                 }
             }
 
             using(Transaction trans = new Transaction(Doc, "Created Beam Axis"))
             {
                 trans.Start();
-                bool isFamily = Doc.IsFamilyDocument;
+                bool isFamilyDoc = Doc.IsFamilyDocument;
                 foreach(var line in beamAxis)
                 {
-                    if(isFamily)
+                    if(isFamilyDoc)
                     {
                         ModelCurve modelCurve = Doc.FamilyCreate.NewModelCurve(line, _sketchPlane);
                     }
@@ -192,6 +205,7 @@ namespace CreateBeamAxis
                 }
                 trans.Commit();
             }
+
         }
         #endregion
 
