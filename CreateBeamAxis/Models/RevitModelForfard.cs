@@ -140,6 +140,8 @@ namespace CreateBeamAxis
 
             var beamAxis = new List<Line>();
 
+            beamParameters = beamParameters.Append(new BeamAxis { Distance = 0 });
+
             foreach(var param in paramsForBeamAxisCreating)
             {
                 foreach(var axisParam in beamParameters)
